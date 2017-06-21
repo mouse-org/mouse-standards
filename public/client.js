@@ -25,11 +25,11 @@ $(function() {
   $.get('/charts', function(data) {
     if ($( "#title" ).html().indexOf("By Standard")){
       var dataString = "<ul>";
-      for (var i = 0; i < Object.keys(data["1"]).length; i++){
-        if (data["1"][i]){
+      for (var i = 0; i < Object.keys(data["2"]).length; i++){
+        if (data["2"][i]){
           dataString
             += "<li class='alignment-item'><strong class='standard'>"
-            + data["1"][i]["value"]
+            + data["2"][i]["value"]
             + "</strong><ul class='project-list'>";
           for (var j = 2; j < Object.keys(data).length; j ++) {
             if (data[j][i]){
@@ -39,6 +39,8 @@ $(function() {
             }   
           }
           dataString += "</ul></li>";
+        } else {
+          console.log("No data");
         }
         
       }
@@ -50,18 +52,20 @@ $(function() {
       var dataString = "<ul>";
       for (var i = 2; i < Object.keys(data).length; i++){
         if (data[i]){
-          dataString
-            += "<li class='alignment-item'><strong class='project'>"
-            + data[i]["1"]["value"]
-            + "</strong><ul class='standard-list'>";
-          for(var j = 0; j < Object.keys(data["1"]).length; j++){
-            if (data[i][j]){
-              if (data[i][j]["value"] === "X"){
-                dataString += "<li>" + data["1"][j]["value"] + "</li>";
+          if (data[i]["1"]){
+            dataString
+              += "<li class='alignment-item'><strong class='project'>"
+              + data[i]["1"]["value"]
+              + "</strong><ul class='standard-list'>";
+            for(var j = 0; j < Object.keys(data["2"]).length; j++){
+              if (data[i][j]){
+                if (data[i][j]["value"] === "X"){
+                  dataString += "<li>" + data["2"][j]["value"] + "</li>";
+                }
               }
             }
+            dataString += "</ul></li>";
           }
-          dataString += "</ul></li>";
         }
 
       }
