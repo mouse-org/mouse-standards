@@ -19,87 +19,63 @@
 // The last stage is to display the dashboard, see `views/index.html`.
 //
 $(function() {
+  var title = $( "#title" ).html();
+  var section;
+  var list;
   $.get('/charts', function(data) {
-    var standardsString = "<ul>";
-    //Object.keys(data).length;
-    for (var i = 0; i < Object.keys(data["1"]).length; i++){
-      if (data["1"][i]){
-        standardsString +="<li><strong class='standard'>" + data["1"][i]["value"] + "</strong><ul class='project-list'>";
+    if ($( "#title" ).html().indexOf("By Standard")){
+      var dataString = "<ul>";
+      for (var i = 0; i < Object.keys(data["1"]).length; i++){
+        if (data["1"][i]){
+          dataString
+            += "<li class='alignment-item'><strong class='standard'>"
+            + data["1"][i]["value"]
+            + "</strong><ul class='project-list'>";
+          for (var j = 2; j < Object.keys(data).length; j ++) {
+            if (data[j][i]){
+              if (data[j][i]["value"] === "X"){
+                dataString += "<li>" + data[j]["1"]["value"] + "</li>";
+              }      
+            }   
+          }
+          dataString += "</ul></li>";
+        }
+        
       }
-      for (var j = 2; j < Object.keys(data).length; j ++) {
-        if (data[j][i]){
-          if (data[j][i]["value"] === "X"){
-            standardsString += "<li>" + data[j]["1"]["value"] + "</li>";
-          }      
-        }   
-      }
-      standardsString += "</ul></li>";
+      dataString += "</ul>";
+      $( "#standards" ).html(dataString);
+      $( ".project-list").hide();
     }
-    standardsString += "</ul>";
-    $( "#charts" ).html(standardsString);
-    $( ".project-list").hide();
-    
+    if ($( "#title" ).html().indexOf("By Project")){
+      var dataString = "<ul>";
+      for (var i = 2; i < Object.keys(data).length; i++){
+        if (data[i]){
+          dataString
+            += "<li class='alignment-item'><strong class='project'>"
+            + data[i]["1"]["value"]
+            + "</strong><ul class='standard-list'>";
+          for(var j = 0; j < Object.keys(data["1"]).length; j++){
+            if (data[i][j]){
+              if (data[i][j]["value"] === "X"){
+                dataString += "<li>" + data["1"][j]["value"] + "</li>";
+              }
+            }
+          }
+          dataString += "</ul></li>";
+        }
+
+      }
+      dataString += "</ul>";
+      $( "#projects" ).html(dataString);
+      $( ".project-list").hide();
+      $( ".standard-list").hide();
+    }
     $( ".standard").click(function() {
       $( this ).siblings().toggle();
-    })
-    
-    
-    /*
-    
-      $.ajax({
-    url: "/api/game/" + gameId + "?playerId=" + playerId,
-    dataType: "json",
-    cache: false,
-    success: function(data) {
-      console.log(" !&!&!&!& DATA:");
-      console.log(data);
-      console.log(" *(@#&*(#&@*($ this:)))");
-      console.log(this);
-      callback(data);
-    }.bind(this),
-    error: function(xhr, status, err) {
-      console.log("getData() ERROR ~~~~~~~")
-      console.error("GameId: " + gameId, "PlayerId: " + playerId, status, err.toString(), xhr.toString());
-    }.bind(this)
-  });
-    
-    */
-    
-    
-    
-    
-    /*
-    var dataStr="";
-    var imgStr="";
-    var gridster = $("section#charts").gridster({
-        widget_margins: [5, 5],
-        widget_base_dimensions: [255, 155]
-    }).data('gridster');
-    var carray = $.map(charts, function(value, index) {
-      return [value];
     });
-    
-    // loop through each row
-    for(var i=1; i<carray.length; i++){
-      var rarray = $.map(carray[i], function(value, index) {
-        return [value];
-      });
-      
-      // loop through each column
-      // columns 1 and 2 are skipped - they have meta data, not chart data
-      for(var j=2; j<rarray.length; j++){
-        // store the values in a string
-        dataStr+=rarray[j].value;
-        if(rarray[j+1]) // append comma to all but last value
-          dataStr+=",";
-      }
-    
-      // generate the Google Charts URL
-      imgStr='<img src="//chart.googleapis.com/chart?cht='+rarray[0].value+'&chtt='+rarray[1].value+'&chs=250x150&chd=t:'+dataStr+'&chxt=x,y&chxs=0,c0c0c0,10,0,lt|1,c0c0c0,10,1,lt&chco=000000" />';
-      // Add them to the page using gridster api
-      gridster.add_widget('<span id="chart'+i+'">'+imgStr+'</span>', 1, 1);
-      dataStr=""; // clear the data string for next loop
-    }
-    */
+    $( ".project").click(function() {
+      $( this ).siblings().toggle();
+    });
+
   });
 });

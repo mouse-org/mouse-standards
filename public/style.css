@@ -41,6 +41,14 @@ footer > a {
   color: #BBBBBB;
 }
 
-.standard {
+.alignment-item {
+  margin: 1em;
+}
+
+.standard, .project {
   cursor: pointer;
+}
+
+.alignment-list {
+  max-width: 800px;
 }

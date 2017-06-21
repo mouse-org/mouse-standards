@@ -5,7 +5,7 @@
 var express = require('express');
 var app = express();
 var GoogleSpreadsheets = require("google-spreadsheets");
-var charts;
+var data;
 
 //
 // Step 1: Loading the Data
@@ -29,7 +29,7 @@ GoogleSpreadsheets({
         range: "R1C1:R150C30"
     }, function(err, result) {
     	// Put in-memory store for now
-      charts = result.cells;
+      data = result.cells;
     });
 });
 
@@ -39,8 +39,16 @@ app.get("/", function (request, response) {
   response.sendFile(__dirname + '/views/index.html');
 });
 
+app.get("/standards", function (request, response) {
+  response.sendFile(__dirname + '/views/standards.html');
+});
+
+app.get("/projects", function (request, response) {
+  response.sendFile(__dirname + '/views/projects.html');
+});
+
 app.get("/charts", function (request, response) {
-  response.send(charts);
+  response.send(data);
 });
 
 // listen for requests :)
