@@ -3,8 +3,8 @@
 
 // init project
 var express = require('express');
-var app = express();
 var GoogleSpreadsheets = require("google-spreadsheets");
+var app = express();
 var data;
 
 //
@@ -35,8 +35,10 @@ GoogleSpreadsheets({
 
 app.use(express.static('public'));
 
+
 app.get("/", function (request, response) {
-  response.sendFile(__dirname + '/views/index.html');
+  response.render('index', {locals: {title: 'Welcome!'}});
+  //response.sendFile(__dirname + '/views/index.html');
 });
 
 app.get("/standards", function (request, response) {
@@ -52,6 +54,6 @@ app.get("/charts", function (request, response) {
 });
 
 // listen for requests :)
-listener = app.listen(process.env.PORT, function () {
+var listener = app.listen(process.env.PORT, function () {
   console.log('Your app is listening on port ' + listener.address().port);
 });
